@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import sqlite3
+import asyncio
+import telegram
 from datetime import datetime
 #from playsound import playsound
 import threading
@@ -43,6 +45,8 @@ y.start()
 
 
 def main_progress(window):
+    
+
     config = configparser.ConfigParser()
     config.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
 
@@ -101,11 +105,11 @@ def main_progress(window):
                     #pygame.mixer.music.load(getpath)
                     #pygame.mixer.music.play()
 
-                if config['FILES']['league'] in last_line and "@" in last_line and "buy" in last_line and "position" in last_line:
+                if config['FILES']['league'] in last_line and "@From" in last_line and "buy" in last_line and "position" in last_line:
                     l=l+1
                     splitmsg = last_line.split()
                     buyer = splitmsg[splitmsg.index("Hi,") - 1]
-                    buyer = buyer[1:]
+                    #buyer = buyer[1:]
                     del splitmsg[0:splitmsg.index("Hi,")]
                     buyer = buyer[:-1]
                     item = splitmsg[splitmsg.index("your") + 1:splitmsg.index("listed")]
@@ -144,12 +148,17 @@ def main_progress(window):
 
                     window.setWindowState(QtCore.Qt.WindowActive)
 
+                    async def send(chat, msg):
+                        await telegram.Bot('7770976930:AAGiIoVEjcVR5CF8y4I3EtdUjN02ZVBaFrs').sendMessage(chat_id=chat, text=msg)
 
-                if config['FILES']['league'] in last_line and "@" in last_line and "buy" in last_line and "I'd like" in last_line:
+                    asyncio.run(send('856990350', f'Neuer Trade über {windowprice}' ))
+
+
+                if config['FILES']['league'] in last_line and "@From" in last_line and "buy" in last_line and "I'd like" in last_line:
                     l=l+1
                     splitmsg = last_line.split()
                     buyer = splitmsg[splitmsg.index("Hi,") - 1]
-                    buyer = buyer[1:]
+                    #buyer = buyer[1:]
                     del splitmsg[0:splitmsg.index("Hi,")]
                     buyer = buyer[:-1]
                     item = splitmsg[splitmsg.index("your") + 1:splitmsg.index("for")]
@@ -187,6 +196,10 @@ def main_progress(window):
                     pygame.mixer.music.play()
 
                     window.setWindowState(QtCore.Qt.WindowActive)
+                    async def send(chat, msg):
+                        await telegram.Bot('7770976930:AAGiIoVEjcVR5CF8y4I3EtdUjN02ZVBaFrs').sendMessage(chat_id=chat, text=msg)
+
+                    asyncio.run(send('856990350', f'Neuer Trade über {windowprice}' ))
 
 
                 lastlinesold = lastlinesold + 1
@@ -269,6 +282,8 @@ class Dialog(QtWidgets.QMainWindow):
 
 
 if __name__ == '__main__':
+    
+
     app = QApplication(sys.argv)
     dlg = Dialog()
     dlg.show()
