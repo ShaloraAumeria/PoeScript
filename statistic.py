@@ -1,3 +1,4 @@
+from dotenv.main import load_dotenv
 import os
 import configparser
 import sys
@@ -62,8 +63,9 @@ def main_progress(window):
     verbindung = sqlite3.connect(getpath)
 
     l=0
-
-
+    load_dotenv()
+    secret = os.getenv("BOT_TOKEN")
+  
 
     while True:
         time.sleep(0.5)
@@ -149,7 +151,7 @@ def main_progress(window):
                     window.setWindowState(QtCore.Qt.WindowActive)
 
                     async def send(chat, msg):
-                        await telegram.Bot('7770976930:AAGiIoVEjcVR5CF8y4I3EtdUjN02ZVBaFrs').sendMessage(chat_id=chat, text=msg)
+                        await telegram.Bot(secret).sendMessage(chat_id=chat, text=msg)
 
                     asyncio.run(send('856990350', f'Neuer Trade über {windowprice}' ))
 
@@ -197,7 +199,7 @@ def main_progress(window):
 
                     window.setWindowState(QtCore.Qt.WindowActive)
                     async def send(chat, msg):
-                        await telegram.Bot('7770976930:AAGiIoVEjcVR5CF8y4I3EtdUjN02ZVBaFrs').sendMessage(chat_id=chat, text=msg)
+                        await telegram.Bot(secret).sendMessage(chat_id=chat, text=msg)
 
                     asyncio.run(send('856990350', f'Neuer Trade über {windowprice}' ))
 
